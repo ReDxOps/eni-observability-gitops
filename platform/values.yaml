@@ -1,0 +1,7 @@
+alloy:
+  alloy:
+    configMap:
+      create: false
+      name: alloy-configmap
+      key: config.alloy
+    listenPort: 12345  
