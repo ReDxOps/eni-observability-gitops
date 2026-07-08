@@ -2,3 +2,34 @@ logging {
   level  = "info"
   format = "logfmt"
 }
+
+prometheus.exporter.unix "default" {
+  include_exporter_metrics = true
+  disable_collectors       = ["mdadm"]
+}
+
+prometheus.scrape "default" {
+  targets = array.concat(
+    prometheus.exporter.unix.default.targets,
+    [{
+      job         = "alloy",
+      __address__ = "127.0.0.1:12345",
+    }],
+  )
+
+  forward_to      = [prometheus.remote_write.metrics_service.receiver]
+  scrape_interval = "10s"
+}
+
+
+prometheus.remote_write "metrics_service" {
+  endpoint {
+    url = "http://192.168.100.131:9090/api/v1/write"
+  }
+
+  external_labels = {
+    "client"         = "cluster-k8s-kind-eni-observabilite",
+  }
+}
+
+
