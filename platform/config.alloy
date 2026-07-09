@@ -37,7 +37,7 @@ prometheus.remote_write "metrics_service" {
   }
 
   external_labels = {
-    "client"         = "cluster-k8s-kind-eni-observabilite",
+    "cluster"         = "cluster-k8s-kind-eni-observabilite",
   }
 }
 
