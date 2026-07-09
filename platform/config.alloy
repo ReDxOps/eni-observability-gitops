@@ -21,6 +21,15 @@ prometheus.scrape "default" {
   scrape_interval = "10s"
 }
 
+prometheus.scrape "kube_state_metrics" {
+  targets = [{
+      __address__ = "kube-state-metrics.kube-state-metrics.svc:8080",
+    }]
+
+  forward_to      = [prometheus.remote_write.metrics_service.receiver]
+  scrape_interval = "10s"
+}
+
 
 prometheus.remote_write "metrics_service" {
   endpoint {
